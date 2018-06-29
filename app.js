@@ -56,7 +56,7 @@ window.addEventListener('load', e => {
     }
 });
 
-function _calculateFromWebValue(){
+function _calculateFromWebValue(exchangeRateAPIEndPoint){
     //fetch exchange rate from web
     fetch(exchangeRateAPIEndPoint)
     .then(response => response.json())
