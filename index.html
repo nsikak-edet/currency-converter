@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>Currency Converter</title>
+    <!-- Favicon-->
+    <link rel="icon" href="../../favicon.ico" type="image/x-icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+
+    <!-- Bootstrap Core Css -->
+    <link href="plugins/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+    <!-- Bootstrap Select Css -->
+    <link href="plugins/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link href="css/themes/all-themes.css" rel="stylesheet" />
+
+    <link href="manifest.json" rel="manifest" />
+</head>
+
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+   
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
+                <a href="javascript:void(0);" class="bars"></a>
+                <a class="navbar-brand" href="../../index.html">Currency Converter</a>
+            </div>
+        </div>
+    </nav>
+    <!-- #Top Bar -->
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>Currency Converter</h2>
+            </div>
+            
+            <!-- Select -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Currency Converter written by Nsikak Edet
+                                <small>Source Code can be found here: <a href="https://silviomoreto.github.io/bootstrap-select/" target="_blank">silviomoreto.github.io/bootstrap-select</a></small>
+                            </h2>                            
+                        </div>
+                        <div class="body">
+                            <div class="row clearfix">
+							
+							<div class="col-lg-12">
+									<div class="info-box-4 ">
+										<div class="icon">
+											<div class="chart chart-bar" data-chartcolor="blueGrey"><canvas width="71" height="34" style="display: inline-block; width: 71px; height: 34px; vertical-align: top;"></canvas></div>
+										</div>
+										<div class="content">
+											<div class="text" id="exchange-title"> From NGN > TO USD </div>											
+											<div class="number" id="converted-value">$350</div>											
+										</div>
+										
+									</div>	
+									<div class="text"><h3 id="exchange-rate">$1 = NGN360</h3></div>	
+								</div>
+                                
+                                <div class="col-sm-12">
+                                    <input type="number" placeholder="Enter value to convert" class="form-control" id="exchange-value" />                                        
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <select class="form-control show-tick" id="from-selector">
+                                        <option value="">-- From (Select Currency) --</option>                                       
+                                    </select>
+                                </div>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="to-selector">
+                                        <option value="">-- To (Select Currency) --</option>
+                                    </select>
+                                </div>
+								
+								<div class="col-sm-12">
+									<button type="button" id="convert-button" class="btn btn-block btn-lg btn-primary waves-effect">CONVERT</button>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+				
+
+            </div>
+            <!-- #END# Select -->
+            
+        </div>
+    </section>
+
+    <!-- Jquery Core Js -->
+    <script src="plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <!-- <script src="plugins/bootstrap-select/js/bootstrap-select.js"></script> -->
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="plugins/node-waves/waves.js"></script>
+
+    <!-- Custom Js -->
+    <script src="js/admin.js"></script>
+    <script src="js/pages/forms/basic-form-elements.js"></script>
+
+
+     <!-- APP JS -->
+     <script src="app.js"></script>
+     <script src="idb.js"></script>
+</body>
+</html>
