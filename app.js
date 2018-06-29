@@ -27,32 +27,49 @@ window.addEventListener('load', e => {
 
     //convert button handler
     convertButton.onclick = () => {
+        const errorSelector = document.getElementById("error-div");
         const fromCurrencySelector = document.getElementById("from-selector");
         const fromCurrency = fromCurrencySelector.options[fromCurrencySelector.selectedIndex].value;
 
         const toCurrencySelector = document.getElementById("to-selector");
-        const toCurrency = toCurrencySelector.options[toCurrencySelector.selectedIndex].value
+        const toCurrency = toCurrencySelector.options[toCurrencySelector.selectedIndex].value;
+
+        //clear error 
+        errorSelector.setAttribute("style", "display:none");
         
         exchangeID = `${fromCurrency}_${toCurrency}`;  
         exchangeTitle = `From ${fromCurrency} > To ${toCurrency}`;  
         toCurrencyID = toCurrency;
         fromCurrencyID = fromCurrency;
         const exchangeRateAPIEndPoint = `https://free.currencyconverterapi.com/api/v5/convert?q=${exchangeID}&compact=ultra`;
+        const exchangeVal = document.getElementById("exchange-value").value;
 
-        const storeName = "ExchangeRateStore";
-        dbPromise.then(db => {
-            return db.transaction(storeName, 'readwrite')
-                   .objectStore(storeName)
-                   .get(`${exchangeID}`);            
-        }).then(result => {
-            /** Calculate from web value data not found in database otherwise use database value */
-            if(result == null){
-                _calculateFromWebValue(exchangeRateAPIEndPoint);
-            }else{
-                const exchangeValue = document.getElementById("exchange-value").value;
-                _convertCurrency(result.data, exchangeValue);
-            }            
-        });        
+        /**
+         * Process converstion request if input is valid 
+         * otherwise display error message
+         */
+        if((parseInt(exchangeVal) > 0) && (fromCurrency.length > 0) && (toCurrency.length > 0)){
+            const storeName = "ExchangeRateStore";
+            dbPromise.then(db => {
+                return db.transaction(storeName, 'readwrite')
+                       .objectStore(storeName)
+                       .get(`${exchangeID}`);            
+            }).then(result => {
+                
+                /** Calculate from web value data not found in database
+                 *  otherwise use database value 
+                 **/
+                if(result == null){
+                    _calculateFromWebValue(exchangeRateAPIEndPoint);
+                }else{
+                    const exchangeValue = document.getElementById("exchange-value").value;
+                    _convertCurrency(result.data, exchangeValue);
+                }            
+            });        
+        }else{
+            //display error message
+            errorSelector.setAttribute("style", "display:block");
+        }
     }
 });
 
@@ -88,7 +105,7 @@ function _convertCurrency(data, exchangeValue){
 
     for (var prop in data) {
         exchangeRate = data[prop];
-        totalAmountConverted = exchangeValue * exchangeRate;
+        totalAmountConverted = (exchangeValue * exchangeRate).toFixed(5);
 
         const convertedValueElement = document.getElementById('converted-value');
         const exchangeTitleElement = document.getElementById('exchange-title');
