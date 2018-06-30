@@ -22,37 +22,18 @@ self.addEventListener('install', e => {
     );
 });
 
-// self.addEventListener('fetch', event => {
-//     //const requestUrl = new URL(event.request.url);
-//      event.respondWith(fetchResource(event));
-// });
-
-// function fetchResource(event){    
-//     return caches.match(event.request).then(cacheResponse => {
-//         if(cacheResponse){
-//             return cacheResponse;
-//         }
-
-//         const fetchRequest = event.request.clone();
-//         return fetch(fetchRequest);
-//     });
-// }
-
 // Fetch data from cache.
 self.addEventListener('fetch', (event) => {
     const requestUrl = new URL(event.request.url);
-    console.log(requestUrl);
-    cacheWithNetworkFallbackAndStore(event);
-    // if (requestUrl.pathname === '/rates') {
-    //   // Rates. Don't cache.
-    //   fetch(event.request);
-    // } else if (requestUrl.pathname === '/') {
-    //   // Serve from cache, update in background.
-    //   cacheThenUpdateWithCacheBust(event);
-    // } else {
-    //   // Try cache first. If that fails, go to network and update cache.
-    //   cacheWithNetworkFallbackAndStore(event);
-    // }
+    /***
+     * Fetch all Currency API request from network
+     * if not API request fetch from cache first and if not in cache fetch and store from network
+     */
+    if(requestUrl.origin === "https://free.currencyconverterapi.com"){
+        fetchFromNetwork(event);
+    }else{
+        fetchFromCacheFirst(event);
+    }
   });
  
   /**
@@ -60,7 +41,7 @@ self.addEventListener('fetch', (event) => {
    * stores it in the cache for later.
    * @param {FetchEvent} event The event to handle.
    */
-  function cacheWithNetworkFallbackAndStore(event) {
+  function fetchFromCacheFirst(event) {
     let response = null;
     event.respondWith(fromCache(event.request)
         .catch(() => fetch(event.request.clone())
@@ -70,21 +51,9 @@ self.addEventListener('fetch', (event) => {
             })
             .then(() => response)));
   }
-  
-  /**
-   * Immediately responds from cache, but updates from network in the background.
-   * Performs a cache bust when updating.
-   * @param {FetchEvent} event The event to handle.
-   */
-  function cacheThenUpdateWithCacheBust(event) {
-    const networkRequest =
-        new Request(`${event.request.url}?${Date.now().toString()}`);
-  
-    const network = fetch(networkRequest);
-    const networkClone = network.then((response) => response.clone());
-  
-    event.respondWith(fromCache(event.request).catch(() => networkClone));
-    event.waitUntil(network.then((resp) => update(event.request, resp)));
+
+  function fetchFromNetwork(event){
+      event.respondWith(fetch(event.request.clone()));            
   }
   
   /**

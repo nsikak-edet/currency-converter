@@ -6,7 +6,7 @@ var fromCurrencyID = '';
 var convertButton = document.getElementById("convert-button");
 
 window.addEventListener('load', e => {
-    
+
     //setup the database and datastores
     dbPromise = idb.open('ConverterDatabase', 1, upgradeDB => {
         upgradeDB.createObjectStore('CurrencyStore',{keyPath : 'id'});        
@@ -14,7 +14,7 @@ window.addEventListener('load', e => {
     });   
     
     //populate currency select options
-    _fetchCurrencyFromDBOrWeb();
+    fetchCurrencyFromDBOrWeb();
 
     //convert button handler
     convertButton.onclick = () => {
@@ -51,10 +51,10 @@ window.addEventListener('load', e => {
                  *  otherwise use database value 
                  **/
                 if(result == null){
-                    _calculateFromWebValue(exchangeRateAPIEndPoint);
+                    calculateFromWebValue(exchangeRateAPIEndPoint);
                 }else{
                     const exchangeValue = document.getElementById("exchange-value").value;
-                    _convertCurrency(result.data, exchangeValue);
+                    convertCurrency(result.data, exchangeValue);
                 }            
             });        
         }else{
@@ -64,20 +64,20 @@ window.addEventListener('load', e => {
     }
 });
 
-function _calculateFromWebValue(exchangeRateAPIEndPoint){
+function calculateFromWebValue(exchangeRateAPIEndPoint){
     //fetch exchange rate from web
     fetch(exchangeRateAPIEndPoint)
     .then(response => response.json())
     .then(data => {     
         const exchangeValue = document.getElementById("exchange-value").value;
-        _addExchangeRate(data);
-        _convertCurrency(data, exchangeValue);
+        addExchangeRate(data);
+        convertCurrency(data, exchangeValue);
     }).catch((error) => {
-        _calculateFromCachedExchangeRate();
+        calculateFromCachedExchangeRate();
     });
 }
 
-function _calculateFromCachedExchangeRate(){
+function calculateFromCachedExchangeRate(){
     const storeName = "ExchangeRateStore";
 
     dbPromise.then(db => {
@@ -86,11 +86,11 @@ function _calculateFromCachedExchangeRate(){
         return tx.complete;
     }).then(data => {
         const exchangeValue = document.getElementById("exchange-value").value;
-        _convertCurrency(data, exchangeValue);
+        convertCurrency(data, exchangeValue);
     });
 }
 
-function _convertCurrency(data, exchangeValue){
+function convertCurrency(data, exchangeValue){
 
     let totalAmountConverted = 1;
 
@@ -104,12 +104,12 @@ function _convertCurrency(data, exchangeValue){
 
         convertedValueElement.innerHTML = `${toCurrencyID} ${totalAmountConverted}`;
         exchangeTitleElement.innerHTML = exchangeTitle;
-        exchangeRateElement.innerHTML = `1${fromCurrencyID} = ${exchangeRate}`;
+        exchangeRateElement.innerHTML = `1${fromCurrencyID} = ${toCurrencyID} ${exchangeRate}`;
         break;
     }
 }
 
-function _appendOption(elementSelector, key, value){
+function appendOption(elementSelector, key, value){
     var options = document.getElementById(elementSelector);
     const newOption = document.createElement('option');
     newOption.value= key;
@@ -117,7 +117,7 @@ function _appendOption(elementSelector, key, value){
     options.appendChild(newOption);
 }
 
-function _addCurrency(dbPromise,currencyData){
+function addCurrency(dbPromise,currencyData){
     const storeName = "CurrencyStore";
 
     dbPromise.then(db => {
@@ -127,7 +127,7 @@ function _addCurrency(dbPromise,currencyData){
     })
 }
 
-function _addExchangeRate(data){
+function addExchangeRate(data){
     const storeName = "ExchangeRateStore";
 
     dbPromise.then(db => {
@@ -137,7 +137,7 @@ function _addExchangeRate(data){
     })
 }
 
-function _fetchCurrencyFromDBOrWeb(){    
+function fetchCurrencyFromDBOrWeb(){    
     let dataFound = false;
 
     dbPromise.then(db => {
@@ -152,21 +152,21 @@ function _fetchCurrencyFromDBOrWeb(){
             const optionName = `${currencyData.currencyName} - (${currencyData.id})`;
             const optionValue = currencyData.id;
            
-            _appendOption('from-selector', optionValue, optionName);
-            _appendOption('to-selector', optionValue, optionName);
+            appendOption('from-selector', optionValue, optionName);
+            appendOption('to-selector', optionValue, optionName);
 
             dataFound = true;
         }
 
         if(dataFound == false){
-            _fetchCurrencyDataFromWeb(dbPromise);
+            fetchCurrencyDataFromWeb(dbPromise);
         }
     });
 
 }
 
 
-function _fetchCurrencyDataFromWeb(dbPromise){
+function fetchCurrencyDataFromWeb(dbPromise){
     const currenciesAPIURL = 'https://free.currencyconverterapi.com/api/v5/currencies';
     fetch(currenciesAPIURL).then(response => response.json()).then(data => {
         const currencies = data.results;
@@ -175,14 +175,14 @@ function _fetchCurrencyDataFromWeb(dbPromise){
             let currencyData = currencies[currencyIndex];
 
             //save data into the store
-            _addCurrency(dbPromise,currencyData);
+            addCurrency(dbPromise,currencyData);
 
             //append currency to select options 
             const optionName = `${currencyData.currencyName} - (${currencyData.id})`;
             const optionValue = currencyData.id;
            
-            _appendOption('from-selector', optionValue, optionName);
-            _appendOption('to-selector', optionValue, optionName);
+            appendOption('from-selector', optionValue, optionName);
+            appendOption('to-selector', optionValue, optionName);
         }
 
         console.log(data);
