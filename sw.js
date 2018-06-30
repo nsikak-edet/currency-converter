@@ -5,18 +5,18 @@ self.addEventListener('install', e => {
     e.waitUntil(
         caches.open('cc-static').then(function(cache){
             return cache.addAll([
-                        '/',
-                        '/plugins/bootstrap/css/bootstrap.css',
-                        '/plugins/bootstrap-select/css/bootstrap-select.css',
-                        '/css/style.css',
-                        '/css/themes/all-themes.css',
-                        '/plugins/jquery/jquery.min.js',
-                        '/plugins/bootstrap/js/bootstrap.js',
-                        '/plugins/bootstrap-select/js/bootstrap-select.js',
-                        '/plugins/node-waves/waves.js',
-                        '/js/admin.js',
-                        '/js/pages/forms/basic-form-elements.js',
-                        '/idb.js'
+                        './',
+                        './plugins/bootstrap/css/bootstrap.css',
+                        './plugins/bootstrap-select/css/bootstrap-select.css',
+                        './css/style.css',
+                        './css/themes/all-themes.css',
+                        './plugins/jquery/jquery.min.js',
+                        './plugins/bootstrap/js/bootstrap.js',
+                        './plugins/bootstrap-select/js/bootstrap-select.js',
+                        './plugins/node-waves/waves.js',
+                        './js/admin.js',
+                        './js/pages/forms/basic-form-elements.js',
+                        './idb.js'
             ])
         })
     );
