@@ -3,8 +3,7 @@ var CACHE_NAME = 'cc-static';
 //listent to service worker install event
 self.addEventListener('install', e => {
 
-    //caching all statis files for application 
-    
+    //caching all statis files for application     
     e.waitUntil(
         caches.open(CACHE_NAME).then(function(cache){
             return cache.addAll([
