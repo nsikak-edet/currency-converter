@@ -6,16 +6,7 @@ var fromCurrencyID = '';
 var convertButton = document.getElementById("convert-button");
 
 window.addEventListener('load', e => {
-
-    //register service worker
-    if('serviceWorker' in navigator){
-        try {
-            navigator.serviceWorker.register("sw.js");
-        } catch (error) {
-            console.log("service worker registration failed");
-        }
-    }
-
+    
     //setup the database and datastores
     dbPromise = idb.open('ConverterDatabase', 1, upgradeDB => {
         upgradeDB.createObjectStore('CurrencyStore',{keyPath : 'id'});        

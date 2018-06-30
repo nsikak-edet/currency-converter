@@ -138,10 +138,17 @@
     <!-- Custom Js -->
     <script src="js/admin.js"></script>
 
-
-
      <!-- APP JS -->
      <script src="app.js"></script>
      <script src="idb.js"></script>
+
+     <!-- Register Service Worker -->
+    <script>
+    if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(function(err) {
+                console.log('ServiceWorker registration failed: ', err);
+            });
+    }
+    </script>
 </body>
 </html>
